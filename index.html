@@ -10,185 +10,8 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --fuchsia: #E8007D<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>QR Studio</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --fuchsia: #E8007D; --fuchsia-light: #ff4dab; --fuchsia-pale: #fff0f7;
-      --fuchsia-border: #fcc8e4; --fuchsia-glow: rgba(232,0,125,0.12);
-      --bg: #f7f4f9; --surface: #ffffff; --surface2: #faf8fc;
-      --border: #e8e0f0; --text: #1a1225; --text-muted: #8a7a9b; --text-light: #b5a8c5;
-    }
-    html, body { min-height: 100%; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 16px; }
-    body::before { content: ''; position: fixed; top: -120px; right: -120px; width: 480px; height: 480px; background: radial-gradient(circle, rgba(232,0,125,0.09) 0%, transparent 70%); border-radius: 50%; pointer-events: none; z-index: 0; }
-    body::after { content: ''; position: fixed; bottom: -100px; left: -100px; width: 380px; height: 380px; background: radial-gradient(circle, rgba(232,0,125,0.06) 0%, transparent 70%); border-radius: 50%; pointer-events: none; z-index: 0; }
-    .page { position: relative; z-index: 1; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 48px 20px 60px; }
-    .header { text-align: center; margin-bottom: 40px; animation: fadeDown 0.6s ease both; }
-    .logo-mark { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 18px; background: var(--fuchsia-pale); border: 1px solid var(--fuchsia-border); border-radius: 40px; padding: 8px 18px 8px 10px; }
-    .logo-dot { width: 28px; height: 28px; background: var(--fuchsia); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-    .logo-label { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; letter-spacing: 0.08em; color: var(--fuchsia); }
-    h1 { font-family: 'Syne', sans-serif; font-size: clamp(1.6rem, 4vw, 2.6rem); font-weight: 800; line-height: 1.1; color: var(--text); letter-spacing: -0.02em; }
-    h1 span { color: var(--fuchsia); }
-    .card { width: 100%; max-width: 500px; background: var(--surface); border: 1.5px solid var(--border); border-radius: 24px; padding: 40px 36px; box-shadow: 0 4px 32px rgba(100,60,140,0.07), 0 1px 4px rgba(0,0,0,0.04); animation: fadeUp 0.6s ease 0.1s both; }
-    .field { margin-bottom: 22px; }
-    label { display: block; font-size: 0.95rem; font-weight: 600; color: var(--text); margin-bottom: 8px; }
-    .field-hint { font-size: 0.82rem; color: var(--text-muted); margin-top: 6px; }
-    input[type="text"], input[type="url"] { width: 100%; background: var(--surface2); border: 1.5px solid var(--border); border-radius: 12px; padding: 14px 16px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 1rem; outline: none; transition: border-color 0.2s, box-shadow 0.2s, background 0.2s; }
-    input::placeholder { color: var(--text-light); }
-    input:focus { border-color: var(--fuchsia); box-shadow: 0 0 0 4px var(--fuchsia-glow); background: #fff; }
-    .size-row { display: flex; gap: 8px; }
-    .size-btn { flex: 1; background: var(--surface2); border: 1.5px solid var(--border); border-radius: 10px; padding: 10px 4px; color: var(--text-muted); font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 500; cursor: pointer; text-align: center; transition: all 0.15s; }
-    .size-btn:hover { border-color: var(--fuchsia-light); color: var(--fuchsia); background: var(--fuchsia-pale); }
-    .size-btn.active { background: var(--fuchsia-pale); border-color: var(--fuchsia); color: var(--fuchsia); font-weight: 600; }
-    .btn-generate { width: 100%; margin-top: 6px; background: var(--fuchsia); color: #fff; border: none; border-radius: 12px; padding: 16px; font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; letter-spacing: 0.04em; cursor: pointer; transition: background 0.15s, transform 0.1s, box-shadow 0.15s; box-shadow: 0 4px 18px rgba(232,0,125,0.25); }
-    .btn-generate:hover { background: #c5006a; box-shadow: 0 6px 24px rgba(232,0,125,0.35); }
-    .btn-generate:active { transform: scale(0.98); }
-    .output-area { margin-top: 32px; display: none; flex-direction: column; align-items: center; animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both; }
-    .output-area.visible { display: flex; }
-    .divider { width: 100%; height: 1px; background: var(--border); margin-bottom: 28px; }
-    .qr-frame { background: #fff; border: 1.5px solid var(--fuchsia-border); border-radius: 20px; padding: 24px; box-shadow: 0 6px 32px rgba(232,0,125,0.1), 0 2px 8px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; }
-    #qrcode { display: block; line-height: 0; }
-    #qrcode canvas, #qrcode img { display: block; border-radius: 6px; }
-    .qr-label-display { margin-top: 14px; font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; letter-spacing: 0.04em; color: var(--text); text-align: center; max-width: 280px; word-break: break-word; }
-    .btn-download { margin-top: 20px; display: inline-flex; align-items: center; gap: 8px; background: var(--fuchsia-pale); border: 1.5px solid var(--fuchsia-border); color: var(--fuchsia); border-radius: 10px; padding: 12px 26px; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: background 0.15s, border-color 0.15s, box-shadow 0.15s; }
-    .btn-download:hover { background: #fce0ef; border-color: var(--fuchsia); box-shadow: 0 4px 16px var(--fuchsia-glow); }
-    .footer { margin-top: 36px; font-size: 0.82rem; color: var(--text-light); text-align: center; animation: fadeUp 0.6s ease 0.25s both; }
-    @keyframes fadeDown { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes popIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
-  </style>
-</head>
-<body>
-  <div class="page">
-    <header class="header">
-      <div class="logo-mark">
-        <div class="logo-dot">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <rect x="1" y="1" width="5" height="5" rx="1" fill="white"/>
-            <rect x="8" y="1" width="5" height="5" rx="1" fill="white"/>
-            <rect x="1" y="8" width="5" height="5" rx="1" fill="white"/>
-            <rect x="9" y="9" width="3" height="3" rx="0.5" fill="white"/>
-          </svg>
-        </div>
-        <span class="logo-label">QR STUDIO</span>
-      </div>
-      <h1>QR Generation for<br><span>INS/SOP's</span></h1>
-    </header>
-
-    <div class="card">
-      <div class="field">
-        <label for="url-input">INS/FOR Website Link</label>
-        <input type="url" id="url-input" placeholder="https://www.example.com" autocomplete="off" spellcheck="false"/>
-      </div>
-
-      <div class="field">
-        <label for="label-input">INS/SOP Number – Label</label>
-        <input type="text" id="label-input" placeholder="Name the INS/SOP for easy identification" autocomplete="off"/>
-      </div>
-
-      <div class="field">
-        <label>Image size</label>
-        <div class="size-row">
-          <button class="size-btn" data-size="180">Small</button>
-          <button class="size-btn active" data-size="256">Medium</button>
-          <button class="size-btn" data-size="360">Large</button>
-          <button class="size-btn" data-size="512">Extra Large</button>
-        </div>
-      </div>
-
-      <button class="btn-generate" id="generate-btn">Generate QR Code</button>
-
-      <div class="output-area" id="output-area">
-        <div class="divider"></div>
-        <div class="qr-frame">
-          <div id="qrcode"></div>
-          <div class="qr-label-display" id="qr-label-display"></div>
-        </div>
-        <button class="btn-download" id="download-btn">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-            <polyline points="7 10 12 15 17 10"/>
-            <line x1="12" y1="15" x2="12" y2="3"/>
-          </svg>
-          Download as PNG
-        </button>
-      </div>
-    </div>
-
-    <p class="footer">QR Studio &mdash; Darvin Magundayao</p>
-  </div>
-
-  <script>
-    let selectedSize = 256;
-    document.querySelectorAll('.size-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        selectedSize = parseInt(btn.dataset.size);
-      });
-    });
-    document.getElementById('generate-btn').addEventListener('click', generateQR);
-    document.getElementById('url-input').addEventListener('keydown', e => { if (e.key === 'Enter') generateQR(); });
-    function generateQR() {
-      const url = document.getElementById('url-input').value.trim();
-      const labelText = document.getElementById('label-input').value.trim();
-      if (!url) { shake(document.getElementById('url-input')); return; }
-      let finalUrl = url;
-      if (!/^https?:\/\//i.test(finalUrl)) finalUrl = 'https://' + finalUrl;
-      const container = document.getElementById('qrcode');
-      container.innerHTML = '';
-      new QRCode(container, { text: finalUrl, width: selectedSize, height: selectedSize, colorDark: '#1a1225', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.H });
-      const labelDisplay = document.getElementById('qr-label-display');
-      labelDisplay.textContent = labelText || '';
-      labelDisplay.style.display = labelText ? 'block' : 'none';
-      const outputArea = document.getElementById('output-area');
-      outputArea.classList.remove('visible');
-      void outputArea.offsetWidth;
-      outputArea.classList.add('visible');
-    }
-    document.getElementById('download-btn').addEventListener('click', () => {
-      const qrCanvas = document.querySelector('#qrcode canvas');
-      if (!qrCanvas) return;
-      const labelText = document.getElementById('qr-label-display').textContent;
-      const padding = 28;
-      const fontSize = Math.max(16, Math.round(selectedSize * 0.058));
-      const labelPad = labelText ? fontSize * 2.4 : 0;
-      const out = document.createElement('canvas');
-      out.width = qrCanvas.width + padding * 2;
-      out.height = qrCanvas.height + padding * 2 + labelPad;
-      const ctx = out.getContext('2d');
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(0, 0, out.width, out.height);
-      ctx.drawImage(qrCanvas, padding, padding);
-      if (labelText) {
-        ctx.fillStyle = '#1a1225';
-        ctx.font = `700 ${fontSize}px 'Syne', sans-serif`;
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(labelText, out.width / 2, qrCanvas.height + padding + labelPad / 2);
-      }
-      const link = document.createElement('a');
-      const safeName = (labelText || 'qr-code').replace(/\s+/g, '-').replace(/[^a-zA-Z0-9\-]/g, '').toLowerCase() || 'qr-code';
-      link.download = `${safeName}.png`;
-      link.href = out.toDataURL('image/png');
-      link.click();
-    });
-    function shake(el) {
-      const steps = [6, -6, 4, -4, 0]; let i = 0;
-      const run = () => { el.style.transform = `translateX(${steps[i]}px)`; i++; if (i < steps.length) setTimeout(run, 60); else el.style.transform = ''; };
-      run(); el.focus();
-    }
-  </script>
-</body>
-</html>
-
+      --fuchsia: #E8007D;
+      --fuchsia-light: #ff4dab;
       --fuchsia-pale: #fff0f7;
       --fuchsia-border: #fcc8e4;
       --fuchsia-glow: rgba(232, 0, 125, 0.12);
@@ -283,7 +106,7 @@
 
     h1 {
       font-family: 'Syne', sans-serif;
-      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-size: clamp(1.6rem, 4vw, 2.6rem);
       font-weight: 800;
       line-height: 1.1;
       color: var(--text);
@@ -291,13 +114,6 @@
     }
 
     h1 span { color: var(--fuchsia); }
-
-    .subtitle {
-      margin-top: 10px;
-      font-size: 1rem;
-      color: var(--text-muted);
-      font-weight: 400;
-    }
 
     .card {
       width: 100%;
@@ -318,12 +134,6 @@
       font-weight: 600;
       color: var(--text);
       margin-bottom: 8px;
-    }
-
-    .field-hint {
-      font-size: 0.82rem;
-      color: var(--text-muted);
-      margin-top: 6px;
     }
 
     input[type="text"],
@@ -505,21 +315,18 @@
         </div>
         <span class="logo-label">QR STUDIO</span>
       </div>
-      <h1>Create your<br><span>QR code</span> instantly</h1>
-      <p class="subtitle">Paste a link, add a label, download your PNG.</p>
+      <h1>QR Generation for<br><span>INS/SOP's</span></h1>
     </header>
 
     <div class="card">
       <div class="field">
-        <label for="url-input">Website address</label>
+        <label for="url-input">INS/FOR Website Link</label>
         <input type="url" id="url-input" placeholder="https://www.example.com" autocomplete="off" spellcheck="false"/>
-        <p class="field-hint">Paste or type the full web address here</p>
       </div>
 
       <div class="field">
-        <label for="label-input">Label (optional)</label>
-        <input type="text" id="label-input" placeholder="e.g. Visit our website" autocomplete="off"/>
-        <p class="field-hint">This text will appear underneath the QR code in your PNG</p>
+        <label for="label-input">INS/SOP Number – Label</label>
+        <input type="text" id="label-input" placeholder="Name the INS/SOP for easy identification" autocomplete="off"/>
       </div>
 
       <div class="field">
@@ -551,7 +358,7 @@
       </div>
     </div>
 
-    <p class="footer">QR Studio &mdash; simple, free, no sign-up needed.</p>
+    <p class="footer">QR Studio &mdash; Darvin Magundayao</p>
   </div>
 
   <script>
